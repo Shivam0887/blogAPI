@@ -96,10 +96,14 @@ const signin = async (req, res) => {
 
     res.cookie("accessToken", access_token, {
       httpOnly: true,
+      secure: true,
+      sameSite: "none",
       expires: new Date(Date.now() + 10 * 60 * 1000)
     });
     res.cookie("refreshToken", refresh_token, {
       httpOnly: true,
+      secure: true,
+      sameSite: "none",
       expires: new Date(Date.now() + 24 * 60 * 60 * 1000)
     });
 
@@ -133,7 +137,10 @@ const logout = (req, res) => {
       );
 
       res
-        .clearCookie("refreshToken")
+        .clearCookie("refreshToken", {
+          secure: true,
+          sameSite: "none",
+        })
         .status(200)
         .json({ status: true, message: "logout successfully" });
     }
@@ -174,7 +181,12 @@ const refresh_token = (req, res) => {
         user.tokens.accessToken.expireAt = Date.now() + 10 * 60 * 1000;
         await user.save();
 
-        res.cookie("accessToken", accessToken, { httpOnly: true, expires: new Date(Date.now() + 10 * 60 * 1000) });
+        res.cookie("accessToken", accessToken, { 
+          httpOnly: true, 
+          secure: true,
+          sameSite: "none",
+          expires: new Date(Date.now() + 10 * 60 * 1000) 
+        });
 
         res.status(200).json({
           status: true,
