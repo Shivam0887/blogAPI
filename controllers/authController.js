@@ -167,7 +167,7 @@ const refresh_token = (req, res) => {
         const accessToken = jwt.sign(
           { _id: user._id },
           process.env.ACCESS_TOKEN_SECRET,
-          { expiresIn: "1m" }
+          { expiresIn: "10m" }
         );
 
         user.tokens.accessToken.token = accessToken;
